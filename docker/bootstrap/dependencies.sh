@@ -28,10 +28,9 @@ sudo -u postgres createuser -s digdag_test
 sudo -u postgres createdb -O digdag_test digdag_test
 
 # Python
-apt-get -y install python python-pip python-dev
-pip install pip --upgrade && hash -r pip # rehashed https://github.com/pypa/pip/issues/5240
-# Using sphinx==1.4.9 because sphinx_rtd_theme with sphinx 1.5.x has a problem with search and its fix is not released: https://github.com/snide/sphinx_rtd_theme/pull/346
-pip install sphinx==1.4.9 recommonmark sphinx_rtd_theme
+apt-get -y install python3 python3-pip python3-dev
+pip3 install --upgrade pip && hash -r pip # rehashed https://github.com/pypa/pip/issues/5240
+pip3 install sphinx==1.8.4 recommonmark==0.5.0 sphinx_rtd_theme==0.4.3
 
 # Ruby
 apt-get -y install ruby-full
