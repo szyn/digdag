@@ -2761,7 +2761,7 @@ class ParserTest extends React.Component {
 class AppWrapper extends React.Component {
   render () {
     return (
-      <div className='container-fluid p-0'>
+      <div>
         <Navbar />
         <div className='app-wrapper'>
           {this.props.children}
@@ -2805,7 +2805,7 @@ export class CodeViewerTest extends React.Component {
 class ConsolePage extends React.Component {
   render () {
     return (
-      <div className='container-fluid p-0'>
+      <div>
         <Router history={browserHistory}>
           <Route component={CacheLoader}>
             <Route component={AppWrapper}>
