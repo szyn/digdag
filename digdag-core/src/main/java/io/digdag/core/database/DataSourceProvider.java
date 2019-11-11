@@ -59,7 +59,7 @@ public class DataSourceProvider
         // that depend on this DataSourceProvider.
         // To solve this issue, here holds one Connection until PreDestroy.
         JdbcDataSource ds = new JdbcDataSource();
-        ds.setUrl(url + ";DB_CLOSE_ON_EXIT=FALSE");
+        ds.setUrl(url + ";DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=FALSE");
 
         logger.debug("Using database URL {}", url);
 
