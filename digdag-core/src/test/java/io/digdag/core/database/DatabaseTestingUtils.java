@@ -49,7 +49,7 @@ public class DatabaseTestingUtils
         else {
             return DatabaseConfig.builder()
                 .type("h2")
-                .path(Optional.absent())
+                .path("digdag-tests.db")
                 .remoteDatabaseConfig(Optional.absent())
                 .options(ImmutableMap.of())
                 .expireLockInterval(10)
