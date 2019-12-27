@@ -2031,15 +2031,6 @@ class Navbar extends React.Component {
     return navbar && navbar.style ? navbar.style : {}
   }
 
-  isActiveClass (path) {
-    const { location } = this.props
-    const match = matchPath(location.pathname, {
-      path: path,
-      exact: true
-    })
-    return match ? 'active' : ''
-  }
-
   render () {
     return (
       <nav className={`navbar ${this.className()} navbar-dark navbar-expand-lg`} style={this.style()}>
@@ -2052,8 +2043,8 @@ class Navbar extends React.Component {
         </button>
         <div id='navbar' className='collapse navbar-collapse'>
           <ul className='navbar-nav mr-auto'>
-            <li className={`nav-item ${this.isActiveClass('/')}`}><Link className='nav-link' to='/'>Workflows</Link></li>
-            <li className={`nav-item ${this.isActiveClass('/projects')}`}><Link className='nav-link' to='/projects'>Projects</Link></li>
+            <li><NavLink className='nav-link' exact to='/'>Workflows</NavLink></li>
+            <li><NavLink className='nav-link' exact to='/projects'>Projects</NavLink></li>
           </ul>
           <li className='navbar-text navbar-right'><VersionView /></li>
           <ul className='nav navbar-nav navbar-right'>
