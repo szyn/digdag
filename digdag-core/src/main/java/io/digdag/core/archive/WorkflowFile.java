@@ -24,6 +24,7 @@ public class WorkflowFile
         "_check",
         "_retry",
         "_parallel",
+        "_chunked_parallel"
     };
 
     private final String workflowName;

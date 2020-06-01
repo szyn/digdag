@@ -31,7 +31,8 @@ public class WorkflowCompiler
         "_check",
         "_retry",
         "_export",
-        "_secrets"
+        "_secrets",
+        "_chunked_parallel"
     ));
 
     public WorkflowCompiler()
@@ -247,6 +248,32 @@ public class WorkflowCompiler
                         }
                         subtask.modifyConfig().remove("_after");  // suppress "Parameter '_after' is not used" warning message
                         names.put(subtask.getName(), subtask);
+                    }
+                }
+                else if (config.has("_chunked_parallel")) {
+                    Integer chunkSize = config.get("_chunked_parallel", int.class);
+                    List<TaskBuilder> beforeList = new ArrayList<>();
+                    for (List<TaskBuilder> chunkedSubtasks : Lists.partition(subtasks, chunkSize)) {
+                        Map<String, TaskBuilder> names = new HashMap<>();
+                        for (TaskBuilder subtask : chunkedSubtasks) {
+                            if (subtask.getConfig().get("_background", boolean.class, false)) {
+                                throw new ConfigException("Setting \"_background: true\" option is invalid (unnecessary) if its parent task has \"_parallel: true\" option");
+                            }
+                            for (String upName : subtask.getConfig().getListOrEmpty("_after", String.class)) {
+                                TaskBuilder up = names.get(upName);
+                                if (up == null) {
+                                    throw new ConfigException("Dependency task '"+upName+"' does not exist");
+                                }
+                                subtask.addUpstream(up);
+                            }
+                            subtask.modifyConfig().remove("_after");  // suppress "Parameter '_after' is not used" warning message
+                            names.put(subtask.getName(), subtask);
+                            for (TaskBuilder before : beforeList) {
+                                subtask.addUpstream(before);
+                            }
+                        }
+                        beforeList.clear();
+                        beforeList.addAll(chunkedSubtasks);
                     }
                 }
                 else {
