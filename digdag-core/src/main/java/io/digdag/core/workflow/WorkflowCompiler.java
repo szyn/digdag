@@ -233,41 +233,16 @@ public class WorkflowCompiler
                     .collect(Collectors.toList());
 
                 if (config.get("_parallel", boolean.class, false)) {
-                    // _after: is valid only when parallel: is true
-                    Map<String, TaskBuilder> names = new HashMap<>();
                     for (TaskBuilder subtask : subtasks) {
-                        if (subtask.getConfig().get("_background", boolean.class, false)) {
-                            throw new ConfigException("Setting \"_background: true\" option is invalid (unnecessary) if its parent task has \"_parallel: true\" option");
-                        }
-                        for (String upName : subtask.getConfig().getListOrEmpty("_after", String.class)) {
-                            TaskBuilder up = names.get(upName);
-                            if (up == null) {
-                                throw new ConfigException("Dependency task '"+upName+"' does not exist");
-                            }
-                            subtask.addUpstream(up);
-                        }
-                        subtask.modifyConfig().remove("_after");  // suppress "Parameter '_after' is not used" warning message
-                        names.put(subtask.getName(), subtask);
+                        parseSubtaskWithParallel(subtask);
                     }
                 }
                 else if (config.has("_chunked_parallel")) {
                     Integer chunkSize = config.get("_chunked_parallel", int.class);
                     List<TaskBuilder> beforeList = new ArrayList<>();
                     for (List<TaskBuilder> chunkedSubtasks : Lists.partition(subtasks, chunkSize)) {
-                        Map<String, TaskBuilder> names = new HashMap<>();
                         for (TaskBuilder subtask : chunkedSubtasks) {
-                            if (subtask.getConfig().get("_background", boolean.class, false)) {
-                                throw new ConfigException("Setting \"_background: true\" option is invalid (unnecessary) if its parent task has \"_parallel: true\" option");
-                            }
-                            for (String upName : subtask.getConfig().getListOrEmpty("_after", String.class)) {
-                                TaskBuilder up = names.get(upName);
-                                if (up == null) {
-                                    throw new ConfigException("Dependency task '"+upName+"' does not exist");
-                                }
-                                subtask.addUpstream(up);
-                            }
-                            subtask.modifyConfig().remove("_after");  // suppress "Parameter '_after' is not used" warning message
-                            names.put(subtask.getName(), subtask);
+                            parseSubtaskWithParallel(subtask);
                             for (TaskBuilder before : beforeList) {
                                 subtask.addUpstream(before);
                             }
@@ -329,6 +304,24 @@ public class WorkflowCompiler
             return new TaskType.Builder()
                 .groupingOnly(groupingOnly)
                 .build();
+        }
+
+        private void parseSubtaskWithParallel(TaskBuilder subtask)
+        {
+            Map<String, TaskBuilder> names = new HashMap<>();
+            if (subtask.getConfig().get("_background", boolean.class, false)) {
+                throw new ConfigException("Setting \"_background: true\" option is invalid (unnecessary) if its parent task has \"_parallel: true\" option");
+            }
+            // _after: is valid only when parallel: is true
+            for (String upName : subtask.getConfig().getListOrEmpty("_after", String.class)) {
+                TaskBuilder up = names.get(upName);
+                if (up == null) {
+                    throw new ConfigException("Dependency task '"+upName+"' does not exist");
+                }
+                subtask.addUpstream(up);
+            }
+            subtask.modifyConfig().remove("_after");  // suppress "Parameter '_after' is not used" warning message
+            names.put(subtask.getName(), subtask);
         }
     }
 }
