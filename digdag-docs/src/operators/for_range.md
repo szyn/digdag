@@ -69,6 +69,15 @@ This operator exports `${range.from}`, `${range.to}`, and `${range.index}` varia
   _parallel: true
   ```
 
+* **\_chunked_parallel**: NUMBER
+  Runs the repeating tasks in parallel with the number of loops running in parallel is limited to NUMBER. Note that the tasks in the loop will be running in serial.
+
+  Examples:
+
+  ```
+  _chunked_parallel: 2
+  ```
+
 * **\_do**: TASKS
 
   Tasks to run.
