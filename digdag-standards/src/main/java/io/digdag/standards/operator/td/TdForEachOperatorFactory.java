@@ -96,6 +96,7 @@ public class TdForEachOperatorFactory
             List<Config> rows = fetchRows(j);
 
             boolean parallel = params.get("_parallel", boolean.class, false);
+            boolean isChunkedParallel = params.has("_chunked_parallel");
 
             Config subtasks = doConfig.getFactory().create();
             for (int i = 0; i < rows.size(); i++) {
@@ -108,6 +109,8 @@ public class TdForEachOperatorFactory
 
             if (parallel) {
                 subtasks.set("_parallel", true);
+            } else if (isChunkedParallel) {
+                subtasks.set("_chunked_parallel", params.get("_chunked_parallel", int.class));
             }
 
             return TaskResult.defaultBuilder(request)

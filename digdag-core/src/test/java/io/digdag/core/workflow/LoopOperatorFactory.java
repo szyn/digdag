@@ -55,6 +55,7 @@ public class LoopOperatorFactory
             }
 
             boolean parallel = params.get("_parallel", boolean.class, false);
+            boolean isChunkedParallel = params.has("_chunked_parallel");
 
             Config generated = doConfig.getFactory().create();
             for (int i = 0; i < count; i++) {
@@ -68,6 +69,8 @@ public class LoopOperatorFactory
 
             if (parallel) {
                 generated.set("_parallel", parallel);
+            } else if (isChunkedParallel) {
+                generated.set("_chunked_parallel", params.get("_chunked_parallel", int.class));
             }
 
             return TaskResult.defaultBuilder(request)

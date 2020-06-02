@@ -75,6 +75,7 @@ public class ForEachOperatorFactory
             List<Map<Map.Entry<Integer, String>, Map.Entry<Integer, JsonNode>>> combinations = buildCombinations(entries);
 
             boolean parallel = params.get("_parallel", boolean.class, false);
+            boolean isChunkedParallel = params.has("_chunked_parallel");
 
             Config generated = doConfig.getFactory().create();
             for (Map<Map.Entry<Integer, String>, Map.Entry<Integer, JsonNode>> combination : combinations) {
@@ -92,6 +93,8 @@ public class ForEachOperatorFactory
 
             if (parallel) {
                 generated.set("_parallel", parallel);
+            } else if (isChunkedParallel) {
+                generated.set("_chunked_parallel", params.get("_chunked_parallel", int.class));
             }
 
             return TaskResult.defaultBuilder(request)

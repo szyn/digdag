@@ -52,6 +52,7 @@ public class ForRangeOperatorFactory
 
             Config doConfig = request.getConfig().getNested("_do");
             boolean parallel = params.get("_parallel", boolean.class, false);
+            boolean isChunkedParallel = params.has("_chunked_parallel");
 
             Config rangeConfig = params.parseNested("_command");
             long from = rangeConfig.get("from", long.class);
@@ -99,6 +100,8 @@ public class ForRangeOperatorFactory
 
             if (parallel) {
                 generated.set("_parallel", parallel);
+            } else if (isChunkedParallel) {
+                generated.set("_chunked_parallel", params.get("_chunked_parallel", int.class));
             }
 
             return TaskResult.defaultBuilder(request)
