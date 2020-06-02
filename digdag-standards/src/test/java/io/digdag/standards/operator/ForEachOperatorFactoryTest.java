@@ -92,6 +92,15 @@ public class ForEachOperatorFactoryTest
     }
 
     @Test
+    public void chunkedParallelComplex()
+            throws Exception
+    {
+        assertByResource(
+                "/io/digdag/standards/operator/for_each/chunked_parallel_complex.yml",
+                "/io/digdag/standards/operator/for_each/chunked_parallel_complex_expected.yml");
+    }
+
+    @Test
     public void parseNestedMap()
         throws Exception
     {

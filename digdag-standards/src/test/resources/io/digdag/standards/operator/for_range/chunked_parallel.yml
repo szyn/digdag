@@ -1,0 +1,7 @@
+_command:
+  from: 0
+  to: 4
+  slices: 4
+_chunked_parallel: 2
+_do:
+  echo>: do

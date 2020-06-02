@@ -89,6 +89,16 @@ public class ForRangeOperatorFactoryTest
     }
 
     @Test
+    public void testChunkedParallel()
+            throws Exception
+    {
+        assertByResource(
+                "/io/digdag/standards/operator/for_range/chunked_parallel.yml",
+                "/io/digdag/standards/operator/for_range/chunked_parallel_expected.yml");
+    }
+
+
+    @Test
     public void testParse()
         throws Exception
     {
