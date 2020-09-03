@@ -456,10 +456,10 @@ public class ServerScheduleIT
             client.disableSchedule(daily.getId());
             client.enableSchedule(daily.getId(), true, skipToTime);
             // get schedule
-            RestSchedule enabled = client.getSchedule(daily.getId());
-            assertThat(enabled.getDisabledAt(), is(Optional.absent()));
-            assertThat(enabled.getNextRunTime(), is(Instant.parse("2291-02-09T10:00:00Z")));
-            assertThat(enabled.getNextScheduleTime(), is(OffsetDateTime.parse("2291-02-09T00:00Z")));
+            RestSchedule enabled1 = client.getSchedule(daily.getId());
+            assertThat(enabled1.getDisabledAt(), is(Optional.absent()));
+            assertThat(enabled1.getNextRunTime(), is(Instant.parse("2291-02-09T10:00:00Z")));
+            assertThat(enabled1.getNextScheduleTime(), is(OffsetDateTime.parse("2291-02-09T00:00Z")));
         }
 
         // hourly
@@ -468,10 +468,10 @@ public class ServerScheduleIT
             client.disableSchedule(hourly.getId());
             client.enableSchedule(hourly.getId(), true, skipToTime);
             // get schedule
-            RestSchedule enabled = client.getSchedule(hourly.getId());
-            assertThat(enabled.getDisabledAt(), is(Optional.absent()));
-            assertThat(enabled.getNextRunTime(), is(Instant.parse("2291-02-09T00:09:00Z")));
-            assertThat(enabled.getNextScheduleTime(), is(OffsetDateTime.parse("2291-02-09T00:00Z")));
+            RestSchedule enabled2 = client.getSchedule(hourly.getId());
+            assertThat(enabled2.getDisabledAt(), is(Optional.absent()));
+            assertThat(enabled2.getNextRunTime(), is(Instant.parse("2291-02-09T00:09:00Z")));
+            assertThat(enabled2.getNextScheduleTime(), is(OffsetDateTime.parse("2291-02-09T00:00Z")));
         }
     }
 }
