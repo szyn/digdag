@@ -85,7 +85,6 @@ public class EcsCommandExecutor
     private final int retryDownloads, retryUploads;
     private final boolean curlFailOptOnUploads; // false by the default
 
-    @Inject
     public EcsCommandExecutor(
             final Config systemConfig,
             final EcsClientFactory ecsClientFactory,
